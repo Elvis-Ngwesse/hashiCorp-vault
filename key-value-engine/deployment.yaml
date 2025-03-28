@@ -5,7 +5,7 @@ metadata:
   namespace: default
   annotations:
     vault.hashicorp.com/agent-inject: "true"
-    vault.hashicorp.com/role: "credentials-policy"  # role in Vault that allows access
+    vault.hashicorp.com/role: "credentials-role"  # role in Vault that allows access
     vault.hashicorp.com/secret-default: "credentials/secret"  # updated path
     vault.hashicorp.com/agent-inject-secret-username: "credentials/secret/username"  # path to username
     vault.hashicorp.com/agent-inject-secret-password: "credentials/secret/password"  # path to password
