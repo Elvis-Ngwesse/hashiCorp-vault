@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ubuntu-vault
+  namespace: default
+  annotations:
+    vault.hashicorp.com/agent-inject: "true"
+    vault.hashicorp.com/role: "credentials-role"  # role in Vault that allows access
+    vault.hashicorp.com/secret-default: "credentials/secret"  # updated path
+    vault.hashicorp.com/agent-inject-secret-username: "credentials/secret/username"  # path to username
+    vault.hashicorp.com/agent-inject-secret-password: "credentials/secret/password"  # path to password
+    vault.hashicorp.com/agent-inject-mount-path-username: "/app/secrets/"  # mount path for username
+    vault.hashicorp.com/agent-inject-mount-path-password: "/app/secrets/"  # mount path for password
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ubuntu-vault
+  template:
+    metadata:
+      labels:
+        app: ubuntu-vault
+    spec:
+      serviceAccountName: credentials-sa
+      containers:
+        - name: ubuntu
+          image: ubuntu:latest
+          command:
+            - /bin/bash
+            - -c
+            - |
+              while true; do
+                if [[ -f /app/secrets/username ]]; then
+                  echo "Username: $(cat /app/secrets/username)"
+                  echo "Password: $(cat /app/secrets/password)"
+                else
+                  echo "Secrets not found!"
+                fi
+                sleep 60
+              done
+          volumeMounts:
+            - name: app-secret
+              mountPath: /app/secrets
+      volumes:
+        - name: app-secret
+          emptyDir: {}
