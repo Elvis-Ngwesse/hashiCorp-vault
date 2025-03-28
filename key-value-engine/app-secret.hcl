@@ -1,3 +1,3 @@
-path "credentials/secret" {
-   capabilities = ["read"]
+path "credentials/secret/*" {
+  capabilities = ["read"]
 }
