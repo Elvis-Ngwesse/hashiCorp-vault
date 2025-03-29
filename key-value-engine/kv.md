@@ -20,8 +20,11 @@ vault kv get credentials/secret
 vault policy write credentials-policy key-value-engine/app-secret.hcl
 vault policy delete credentials-policy
 
-## Create a Kubernetes Service Account ##
-kubectl create sa credentials-sa
+## Create rbac ##
+kubectl apply -f key-value-engine/rbac.yaml
+
+## Create webhook ##
+kubectl apply -f key-value-engine/mutating-webhook.yaml
 
 ## Enable the Kubernetes authentication method ##
 vault auth enable kubernetes

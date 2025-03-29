@@ -9,8 +9,8 @@ metadata:
     vault.hashicorp.com/secret-default: "credentials/secret"  # updated path
     vault.hashicorp.com/agent-inject-secret-username: "credentials/secret/username"  # path to username
     vault.hashicorp.com/agent-inject-secret-password: "credentials/secret/password"  # path to password
-    vault.hashicorp.com/agent-inject-mount-path-username: "/app/secrets/"  # mount path for username
-    vault.hashicorp.com/agent-inject-mount-path-password: "/app/secrets/"  # mount path for password
+    vault.hashicorp.com/agent-inject-mount-path-username: "/vault/secrets/"  # changed mount path for username
+    vault.hashicorp.com/agent-inject-mount-path-password: "/vault/secrets/"  # changed mount path for password
 spec:
   replicas: 1
   selector:
@@ -30,9 +30,9 @@ spec:
             - -c
             - |
               while true; do
-                if [[ -f /app/secrets/username ]]; then
-                  echo "Username: $(cat /app/secrets/username)"
-                  echo "Password: $(cat /app/secrets/password)"
+                if [[ -f /vault/secrets/username ]]; then
+                  echo "Username: $(cat /vault/secrets/username)"
+                  echo "Password: $(cat /vault/secrets/password)"
                 else
                   echo "Secrets not found!"
                 fi
@@ -40,7 +40,7 @@ spec:
               done
           volumeMounts:
             - name: app-secret
-              mountPath: /app/secrets
+              mountPath: /vault/secrets  # changed mountPath to /vault/secrets
       volumes:
         - name: app-secret
           emptyDir: {}
