@@ -21,6 +21,13 @@ helm repo add hashicorp https://helm.releases.hashicorp.com
 helm repo update
 helm install vault hashicorp/vault --set "server.dev.enabled=true"
 
+helm install vault hashicorp/vault \
+  --set "server.dev.enabled=true" \
+  --set "injector.enabled=true"
+
+helm uninstall vault
+
+
 kubectl port-forward svc/vault 8200:8200
 Open your browser and navigate to http://localhost:8200.
 You can log in using the root token (root)

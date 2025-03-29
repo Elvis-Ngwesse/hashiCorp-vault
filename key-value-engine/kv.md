@@ -23,9 +23,6 @@ vault policy delete credentials-policy
 ## Create rbac ##
 kubectl apply -f key-value-engine/rbac.yaml
 
-## Create webhook ##
-kubectl apply -f key-value-engine/mutating-webhook.yaml
-
 ## Enable the Kubernetes authentication method ##
 vault auth enable kubernetes
 
